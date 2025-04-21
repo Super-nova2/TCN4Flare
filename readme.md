@@ -49,6 +49,7 @@ An example of LC with real flares is shown below:
 ![LC_with_real_flare](example_fig/LC_with_real_flare.png)  
 
 Note: The dataset can be downloaded from [download the data](https://zenodo.org/records/15254606?preview=1&token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImIyMjc3NmYxLWM0NzMtNDg0Ny1iMjU5LWU0OTA1ZDA4MzQ3YyIsImRhdGEiOnt9LCJyYW5kb20iOiI0NWI0MmU1OGFhOGJjYmEyMGMwMTRlYTQ2ZGZiZTcyNCJ9.kI0AEcJZtO3jwe8sYFACE6XtTdKVFAZADIwYZeIuFmXulAvBk8IZzx8JBJyRxiyvP-PDrfJ_GFK5vsy7b8Lf8g).
+You can download the dataset and put it in the "data" folder.
 ## 4. Preprocessing
 The input data of TCN model must have the same time interval. So we have to preprocess the LCs to have the same time interval. We use Gaussian Process (GP) to fit the LCs and interpolate the LCs with 1 day time interval.  
 The train dataset, validation dataset, and test dataset are all composed of LCs after GP interpolation.
