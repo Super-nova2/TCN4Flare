@@ -5,7 +5,7 @@ This is the official implementation of the TCN4Flare model.
 This model is based on the Temporal Convolutional Network (TCN) architecture and is specifically designed for the detection of flares in the light curves of AGNs.  
 
 ## 2. Model Architecture
-The TCN4Flare model is a TCN model, using the keras-tcn (3.5.4) python package. The detailed architecture of the model can be seen in https://github.com/philipperemy/keras-tcn.
+The TCN4Flare model is a TCN model, using the keras-tcn (3.5.4) python package. The detailed architecture of the model can be seen in [Keras-tcn](https://github.com/philipperemy/keras-tcn).
 
 Some important arguments used in the TCN4Flare model are:
 - input_shape: the shape of the input light curve. (None, None, 2)
@@ -46,7 +46,9 @@ We combine the above two datasets to get the train dataset. We generate 3 kinds 
 ### 3.4 Validation dataset and Test dataset
 We have got about 100 LCs with real confirmed flares from the ZTF public data of AGNs.(*Paper preparing*) So we combine these LCs with the LCs without flares to get the validation dataset and the test dataset. The validation dataset is used to choose the best model during the training process, and the test dataset is used to evaluate the final performance of the model. Due to the limited number of LCs with real flares, the validation and test datasets are the same.  
 An example of LC with real flares is shown below:  
-![LC_with_real_flare](example_fig/LC_with_real_flare.png)
+![LC_with_real_flare](example_fig/LC_with_real_flare.png)  
+
+Note: The dataset can be downloaded from [download the data](https://zenodo.org/records/15254606?preview=1&token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImIyMjc3NmYxLWM0NzMtNDg0Ny1iMjU5LWU0OTA1ZDA4MzQ3YyIsImRhdGEiOnt9LCJyYW5kb20iOiI0NWI0MmU1OGFhOGJjYmEyMGMwMTRlYTQ2ZGZiZTcyNCJ9.kI0AEcJZtO3jwe8sYFACE6XtTdKVFAZADIwYZeIuFmXulAvBk8IZzx8JBJyRxiyvP-PDrfJ_GFK5vsy7b8Lf8g).
 ## 4. Preprocessing
 The input data of TCN model must have the same time interval. So we have to preprocess the LCs to have the same time interval. We use Gaussian Process (GP) to fit the LCs and interpolate the LCs with 1 day time interval.  
 The train dataset, validation dataset, and test dataset are all composed of LCs after GP interpolation.
