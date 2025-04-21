@@ -52,7 +52,7 @@ The input data of TCN model must have the same time interval. So we have to prep
 The train dataset, validation dataset, and test dataset are all composed of LCs after GP interpolation.
 An example of GP fitted LCs is shown below:(**To be added**)
 
-## 4. Training
+## 5. Training
 We use the train dataset to train the TCN4Flare model. We use the validation dataset to choose the best model during the training process. We use the test dataset to evaluate the final performance of the model.
 
 Because of the inbalanced dataset, we use focal loss function with "alpha=the ratio of the number of flares to the total number" and "gamma=3.0".  
@@ -78,13 +78,13 @@ An example of the training process is shown below:
 
 
 
-## 5. Evaluation
+## 6. Evaluation
 We evaluate the model performance on the test dataset. We use the precision, recall, and F1-score metrics to evaluate the model performance. We also use the confusion matrix to evaluate the model performance.
 
 We compare different models with different arguments and datasets by PR curve and ROC curve. We choose the optimal thereshold to maximize the F1-score and then plot the confusion matrix with the optimal threshold.
 
 
-## 6. Conclusion
+## 7. Conclusion
 The performance of different models are as below:  
 <div style="text-align: center;">
     <img src="fig/compare_models_different_data_ratio.png" alt="models with different data ratio" style="width: 50%; height: auto;">
