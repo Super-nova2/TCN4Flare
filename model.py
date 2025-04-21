@@ -324,7 +324,7 @@ class TCN_model():
                 print(f"加载模型 {model_name} 时出错, load model {model_name} failed: {e}")
 
         fig_nums = (int(plot_roc) + int(plot_pr))
-        fig, axes = plt.subplots(1, fig_nums, figsize=(10*fig_nums, 10))
+        fig, axes = plt.subplots(1, fig_nums, figsize=(5*fig_nums, 5))
 
         # calculate metrics for each model
         for i, model in enumerate(models):
