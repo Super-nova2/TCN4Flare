@@ -49,7 +49,7 @@ class dataset():
         ts = []
         fluxs = []
         flux_errs = []
-        agn_params = []
+        raw_agn_params = []
 
         # extract data from each file
         for file_name in files_names:
@@ -62,7 +62,7 @@ class dataset():
             agn_name = file_name.split('.')[0]
             agn_ra = data['ra'].values[0]
             agn_dec = data['dec'].values[0]
-            agn_params.append([agn_name, agn_ra, agn_dec])
+            raw_agn_params.append([agn_name, agn_ra, agn_dec])
 
             t = data['mjd'].values
             mag = data['mag'].values
@@ -80,15 +80,15 @@ class dataset():
         padded_flux_err = np.array([np.pad(flux_err, (0, max_length - len(flux_err)), constant_values=np.nan) for flux_err in flux_errs])
 
         raw_dataset = np.stack([padded_t, padded_flux, padded_flux_err], axis=2)
-        agn_params = np.array(agn_params)
+        raw_agn_params = np.array(raw_agn_params)
 
         # save the extracted data and agn parameters
-        np.savez_compressed(os.path.join(self.data_path, self.sub_path + band + '_raw_dataset.npz'), raw_dataset=raw_dataset, agn_params=agn_params)
+        np.savez_compressed(os.path.join(self.data_path, self.sub_path + band + '_raw_dataset.npz'), raw_dataset=raw_dataset, agn_params=raw_agn_params)
         np.save(os.path.join(self.data_path, self.sub_path + band + '_empty_files.npy'), empty_files)
         
-        return raw_dataset, agn_params, empty_files
+        return raw_dataset, raw_agn_params, empty_files
     
-    def GP_fit_raw_dataset(self, band, raw_dataset, agn_params):
+    def GP_fit_raw_dataset(self, band, raw_dataset, raw_agn_params):
         """
         使用celerite库拟合GP模型, 返回GP拟合之后得到的数据集fit_dataset, agn_params(新增2列包含GP模型参数), 拟合失败的agn名称列表 \n
         Utilize celerite library to fit GP models, return the dataset fitted by GP, agn_params(with 2 new columns containing GP model parameters), and the list of agn names that failed to fit GP models \n
@@ -135,7 +135,7 @@ class dataset():
             except:
                 print("GP_fit failed for index", i)
                 fit_params.append([-999,-999])
-                fail_agns.append(agn_params[i][0])
+                fail_agns.append(raw_agn_params[i][0])
                 continue
 
             # predict the light curves with 1-day time interval
@@ -153,7 +153,7 @@ class dataset():
         fail_agns = np.array(fail_agns)
 
         # add the GP parameters to agn_params
-        agn_params = np.hstack((agn_params, fit_params))
+        fit_agn_params = np.hstack((raw_agn_params, fit_params))
 
         # pad the predicted data with NaN value to the same length, and stack them into a 3D array
         max_length = max(len(t_pred) for t_pred in t_preds)
@@ -164,10 +164,10 @@ class dataset():
         fit_dataset = np.stack([padded_t_pred, padded_flux_pred, padded_flux_err_pred], axis=2)
 
         # save the fitted dataset and agn parameters
-        np.savez_compressed(os.path.join(self.data_path, self.sub_path + band +'_fit_dataset.npz'), data_pred=fit_dataset, agn_params=agn_params)
+        np.savez_compressed(os.path.join(self.data_path, self.sub_path + band +'_fit_dataset.npz'), data_pred=fit_dataset, agn_params=fit_agn_params)
         np.save(os.path.join(self.data_path, self.sub_path + band + '_fit_fail_agns.npy'), fail_agns)
 
-        return fit_dataset, agn_params, fail_agns
+        return fit_dataset, fit_agn_params, fail_agns
 
 
 def build_dataset(flare_dataset, noflare_dataset, save_path, save_name, ratio=0.1, num=20000):
