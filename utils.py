@@ -191,7 +191,7 @@ def get_x_y(data, labels, mode='train'):
         x = data[k % max_len, :, 1:]
         x = x[~np.isnan(x).any(axis=1)]
         mean = np.mean(x, axis=0)[0]    
-        std = np.mean(x, axis=0)[0]
+        std = np.std(x, axis=0)[0]
         x[:,0] = (x[:,0] - mean) / std  # normalization for flux
         x[:,1] = x[:,1]/std  # normalization for flux_err
         x = np.expand_dims(x, axis=0)
